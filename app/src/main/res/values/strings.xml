@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Test2</string>
+    <string name="button_restart">Рестарт</string>
+    <string name="grid_press_msg">Ну-ну, не так быстро! Поспешишь - людей насмешишь.</string>
+    <string name="restart_press_msg">Нельзя рестартить, пока живность бодрица!</string>
+    <string name="back_press_msg">Нет уж, ты, будь любезен, досмотри ход до конца!</string>
+</resources>
