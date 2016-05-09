@@ -15,7 +15,7 @@ public class AppMgr {
 
     private static AppMgr sAppMgr;
     private Context mAppContext;
-    private LifeForm mCells[][];
+    private Cell mCells[][];
     private Random mRnd;
     private boolean inProcess;
 
@@ -25,36 +25,41 @@ public class AppMgr {
         restart();
     }
 
-    public static AppMgr get(Context c) {
+    static AppMgr get(Context c) {
         if (sAppMgr == null) sAppMgr = new AppMgr(c.getApplicationContext());
         return sAppMgr;
     }
 
-    public LifeForm getCellContent(int pos) {
+    Cell getCellContent(int pos) {
         return mCells[pos/COLUMNS][pos%COLUMNS];
     }
 
-    public void restart() {
+    void restart() {
         inProcess = false;
-        mCells = new LifeForm[ROWS][COLUMNS];
+        mCells = new Cell[ROWS][COLUMNS];
+        for(int r=0; r<ROWS; r++) {
+            for(int c=0; c<COLUMNS; c++) {
+                mCells[r][c] = new Empty(0);
+            }
+        }
         generateLife(new Penguin(0), COLUMNS*ROWS*P_PERCENT/100);
         generateLife(new Whale(0), COLUMNS*ROWS*W_PERCENT/100);
     }
 
-    private void generateLife(LifeForm life, int number) {
-        int row, col;
-        for(int p=number; p>0; p--) {
+    private void generateLife(Cell life, int number) {
+        int r, c;
+        for(int n=number; n>0; n--) {
             do {
-                row = mRnd.nextInt(ROWS);
-                col = mRnd.nextInt(COLUMNS);
-            } while (mCells[row][col]!=null);
-            mCells[row][col] = life.clone();
+                r = mRnd.nextInt(ROWS);
+                c = mRnd.nextInt(COLUMNS);
+            } while (mCells[r][c].getType() != Type.EMPTY);
+            mCells[r][c] = life.clone();
         }
     }
 
-    public boolean isRunning() { return inProcess; }
+    boolean isRunning() { return inProcess; }
 
-    public void go(BaseAdapter adapter) {
+    void go(BaseAdapter adapter) {
         inProcess = true;
         new DemonstrateStepTask().execute(adapter);
     }
@@ -65,12 +70,12 @@ public class AppMgr {
         protected Void doInBackground(BaseAdapter... params) {
             adapter = params[0];
             long timestamp = System.currentTimeMillis();
-            for(int i=0; i<ROWS; i++) {
-                for(int j=0; j<COLUMNS; j++) {
-                    if (mCells[i][j] != null) {
-                        if (timestamp != mCells[i][j].getLastUpdate()) {
+            for(int r=0; r<ROWS; r++) {
+                for(int c=0; c<COLUMNS; c++) {
+                    if (mCells[r][c].getType() != Type.EMPTY) {
+                        if (timestamp != mCells[r][c].getLastUpdate()) {
                             int direction = mRnd.nextInt(8);
-                            if (mCells[i][j].go(mCells, i, j, direction, timestamp)) {
+                            if (mCells[r][c].go(mCells, r, c, direction, timestamp)) {
                                 publishProgress(null);
                                 try {
                                     Thread.sleep(PAUSE);

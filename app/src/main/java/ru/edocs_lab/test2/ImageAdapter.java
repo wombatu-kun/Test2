@@ -45,8 +45,8 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        LifeForm item = (LifeForm)getItem(position);
-        if (item != null) {
+        Cell item = (Cell)getItem(position);
+        if (item.getType() != Type.EMPTY) {
             imageView.setImageResource(item.getPicture());
         } else {
             imageView.setImageBitmap(null);

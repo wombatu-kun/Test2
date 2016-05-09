@@ -1,7 +1,6 @@
 package ru.edocs_lab.test2;
 
-
-class Penguin extends LifeForm {
+class Penguin extends Cell {
     private static final int CLONE_PERIOD = 3;
 
     public Penguin(long timestamp) {
@@ -10,7 +9,7 @@ class Penguin extends LifeForm {
     }
 
     @Override
-    public LifeForm clone() {
+    public Cell clone() {
         return new Penguin(getLastUpdate());
     }
 
@@ -20,8 +19,8 @@ class Penguin extends LifeForm {
     }
 
     @Override
-    boolean go(LifeForm cells[][], int r, int c, int direction, long timestamp) {
+    boolean go(Cell cells[][], int r, int c, int direction, long timestamp) {
         super.go(cells, r, c, direction, timestamp);
-        return tryFreeMove(cells, r, c, direction, CLONE_PERIOD);
+        return tryMove(cells, r, c, direction, CLONE_PERIOD, Type.EMPTY) || tryClone(cells, r, c, CLONE_PERIOD);
     }
 }
