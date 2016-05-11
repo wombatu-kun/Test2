@@ -1,19 +1,19 @@
 package ru.edocs_lab.test2;
 
-class Whale extends Cell {
-    private static final int CLONE_PERIOD = 8;
+class Whale extends CellContent {
+    private static final int COPY_PERIOD = 8;
     private static final int STARVATION = 3;
 
-    private int mHungerLevel;
+    private int hungerLevel;
 
     public Whale(long timestamp) {
         super(timestamp);
-        mType = Type.WHALE;
-        mHungerLevel = 0;
+        type = Type.WHALE;
+        hungerLevel = 0;
     }
 
     @Override
-    public Cell copy() {
+    public CellContent copy() {
         return new Whale(getLastUpdate());
     }
 
@@ -23,20 +23,21 @@ class Whale extends Cell {
     }
 
     @Override
-    boolean go(Cell cells[][], int r, int c, int direction, long timestamp) {
-        super.go(cells, r, c, direction, timestamp);
+    boolean go(Cell cell, Direction randomDir, long timestamp) {
+        super.go(cell, randomDir, timestamp);
         boolean moved;
-        int new_rc[] = findFirstThing(cells, r, c, Type.PENGUIN);
-        if (tryMove(cells, r, c, new_rc[2], CLONE_PERIOD, Type.PENGUIN)) {
-            mHungerLevel = 0;
+        Cell environment[] = cell.getEnvironment();
+        Direction dir = findRightDirection(environment, Type.PENGUIN);
+        if (tryMove(cell, dir, COPY_PERIOD, Type.PENGUIN)) {
+            hungerLevel = 0;
             moved = true;
         } else {
-            mHungerLevel++;
-            if (mHungerLevel == STARVATION) {
-                cells[r][c] = new Empty(mLastUpdate);
+            hungerLevel++;
+            if (hungerLevel == STARVATION) {
+                cell.setContent(new Empty(lastUpdate));
                 moved = true;
             } else {
-                moved = tryMove(cells, r, c, direction, CLONE_PERIOD, Type.EMPTY) || tryClone(cells, r, c, CLONE_PERIOD);
+                moved = tryMove(cell, randomDir, COPY_PERIOD, Type.EMPTY) || tryCopy(environment, COPY_PERIOD);;
             }
         }
         return moved;

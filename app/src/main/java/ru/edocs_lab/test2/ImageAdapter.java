@@ -10,16 +10,16 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
-    private WorldManager mWorldManager;
-    private int mCellWidth;
-    private int mCellHeight;
+    private Context context;
+    private WorldManager worldManager;
+    private int cellWidth;
+    private int cellHeight;
 
     public ImageAdapter(Context c, int width, int height) {
-        mContext = c;
-        mWorldManager = WorldManager.get();
-        mCellWidth = width;
-        mCellHeight = height;
+        context = c;
+        worldManager = WorldManager.get();
+        cellWidth = width;
+        cellHeight = height;
     }
 
     public int getCount() {
@@ -27,7 +27,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return mWorldManager.getCellContent(position);
+        return worldManager.getCellContent(position);
     }
 
     public long getItemId(int position) {
@@ -37,15 +37,15 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(mCellWidth, mCellHeight));
+            imageView = new ImageView(context);
+            imageView.setLayoutParams(new GridView.LayoutParams(cellWidth, cellHeight));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setBackgroundColor(Color.BLUE);
             imageView.setPadding(0, 0, 0, 0);
         } else {
             imageView = (ImageView) convertView;
         }
-        Cell item = (Cell)getItem(position);
+        CellContent item = (CellContent)getItem(position);
         if (item.getType() != Type.EMPTY) {
             imageView.setImageResource(item.getPicture());
         } else {

@@ -1,14 +1,14 @@
 package ru.edocs_lab.test2;
 
-class Empty extends Cell {
+class Empty extends CellContent {
 
     public Empty(long timestamp) {
         super(timestamp);
-        mType = Type.EMPTY;
+        type = Type.EMPTY;
     }
 
     @Override
-    public Cell copy() {
+    public CellContent copy() {
         return new Empty(getLastUpdate());
     }
 
@@ -18,7 +18,7 @@ class Empty extends Cell {
     }
 
     @Override
-    boolean go(Cell cells[][], int r, int c, int direction, long timestamp) {
-        return super.go(cells, r, c, direction, timestamp);
+    boolean go(Cell cell, Direction dir, long timestamp) {
+        return super.go(cell, dir, timestamp);
     }
 }

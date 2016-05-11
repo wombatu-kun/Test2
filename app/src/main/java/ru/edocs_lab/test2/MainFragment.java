@@ -12,19 +12,20 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 public class MainFragment extends Fragment {
+    private static final int HEIGHT_CORRECTION = 80;
 
-    private WorldManager mWorldManager;
-    private ImageAdapter mAdapter;
+    private WorldManager worldManager;
+    private ImageAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        mWorldManager = WorldManager.get();
+        worldManager = WorldManager.get();
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        mAdapter = new ImageAdapter(getActivity(),
-                (dm.widthPixels / WorldManager.COLUMNS) - 1, (int)(dm.heightPixels - dm.density*80) / WorldManager.ROWS);
+        adapter = new ImageAdapter(getActivity(),
+                (dm.widthPixels / WorldManager.COLUMNS) - 1, (int)(dm.heightPixels - dm.density*HEIGHT_CORRECTION) / WorldManager.ROWS);
     }
 
     @Override
@@ -32,12 +33,12 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridView = (GridView) v.findViewById(R.id.gridview);
         gridView.setNumColumns(WorldManager.COLUMNS);
-        gridView.setAdapter(mAdapter);
+        gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!mWorldManager.isRunning()) {
-                    mWorldManager.go(mAdapter);
+                if (!worldManager.isRunning()) {
+                    worldManager.go(adapter);
                 } else {
                     Toast.makeText(getActivity(), R.string.grid_press_msg, Toast.LENGTH_SHORT).show();
                 }
@@ -47,9 +48,9 @@ public class MainFragment extends Fragment {
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mWorldManager.isRunning()) {
-                    mWorldManager.restart();
-                    mAdapter.notifyDataSetChanged();
+                if (!worldManager.isRunning()) {
+                    worldManager.restart();
+                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), R.string.restart_press_msg, Toast.LENGTH_SHORT).show();
                 }
@@ -59,10 +60,10 @@ public class MainFragment extends Fragment {
     }
 
     public void onBackPressed() {
-        if (mWorldManager.isRunning()) {
+        if (worldManager.isRunning()) {
             Toast.makeText(getActivity(), R.string.back_press_msg, Toast.LENGTH_SHORT).show();
         } else {
-            mWorldManager.restart();
+            worldManager.restart();
             getActivity().finish();
         }
     }
