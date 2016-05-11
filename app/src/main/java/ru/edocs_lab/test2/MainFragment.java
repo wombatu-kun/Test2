@@ -13,31 +13,31 @@ import android.widget.Toast;
 
 public class MainFragment extends Fragment {
 
-    private AppMgr mAppMgr;
+    private WorldManager mWorldManager;
     private ImageAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        mAppMgr = AppMgr.get(getActivity());
+        mWorldManager = WorldManager.get();
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
         mAdapter = new ImageAdapter(getActivity(),
-                (dm.widthPixels / AppMgr.COLUMNS) - 1, (int)(dm.heightPixels - dm.density*80) / AppMgr.ROWS);
+                (dm.widthPixels / WorldManager.COLUMNS) - 1, (int)(dm.heightPixels - dm.density*80) / WorldManager.ROWS);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        GridView gridview = (GridView) v.findViewById(R.id.gridview);
-        gridview.setNumColumns(mAppMgr.COLUMNS);
-        gridview.setAdapter(mAdapter);
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        GridView gridView = (GridView) v.findViewById(R.id.gridview);
+        gridView.setNumColumns(WorldManager.COLUMNS);
+        gridView.setAdapter(mAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!mAppMgr.isRunning()) {
-                    mAppMgr.go(mAdapter);
+                if (!mWorldManager.isRunning()) {
+                    mWorldManager.go(mAdapter);
                 } else {
                     Toast.makeText(getActivity(), R.string.grid_press_msg, Toast.LENGTH_SHORT).show();
                 }
@@ -47,8 +47,8 @@ public class MainFragment extends Fragment {
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mAppMgr.isRunning()) {
-                    mAppMgr.restart();
+                if (!mWorldManager.isRunning()) {
+                    mWorldManager.restart();
                     mAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), R.string.restart_press_msg, Toast.LENGTH_SHORT).show();
@@ -59,10 +59,10 @@ public class MainFragment extends Fragment {
     }
 
     public void onBackPressed() {
-        if (mAppMgr.isRunning()) {
+        if (mWorldManager.isRunning()) {
             Toast.makeText(getActivity(), R.string.back_press_msg, Toast.LENGTH_SHORT).show();
         } else {
-            mAppMgr.restart();
+            mWorldManager.restart();
             getActivity().finish();
         }
     }

@@ -9,7 +9,7 @@ class Penguin extends Cell {
     }
 
     @Override
-    public Cell clone() {
+    public Cell copy() {
         return new Penguin(getLastUpdate());
     }
 

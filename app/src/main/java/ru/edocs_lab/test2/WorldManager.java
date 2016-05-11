@@ -1,33 +1,30 @@
 package ru.edocs_lab.test2;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
 
 import java.util.Random;
 
-public class AppMgr {
+public class WorldManager {
     public static final int COLUMNS = 10;
     public static final int ROWS = 15;
     private static final int PAUSE = 150;
     private static final int P_PERCENT = 50;
     private static final int W_PERCENT = 5;
 
-    private static AppMgr sAppMgr;
-    private Context mAppContext;
+    private static WorldManager sWorldManager;
     private Cell mCells[][];
     private Random mRnd;
     private boolean inProcess;
 
-    private AppMgr(Context appContext) {
-        mAppContext = appContext;
+    private WorldManager() {
         mRnd = new Random(System.currentTimeMillis());
         restart();
     }
 
-    static AppMgr get(Context c) {
-        if (sAppMgr == null) sAppMgr = new AppMgr(c.getApplicationContext());
-        return sAppMgr;
+    static WorldManager get() {
+        if (sWorldManager == null) sWorldManager = new WorldManager();
+        return sWorldManager;
     }
 
     Cell getCellContent(int pos) {
@@ -53,7 +50,7 @@ public class AppMgr {
                 r = mRnd.nextInt(ROWS);
                 c = mRnd.nextInt(COLUMNS);
             } while (mCells[r][c].getType() != Type.EMPTY);
-            mCells[r][c] = life.clone();
+            mCells[r][c] = life.copy();
         }
     }
 

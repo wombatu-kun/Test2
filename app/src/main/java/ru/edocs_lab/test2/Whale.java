@@ -13,7 +13,7 @@ class Whale extends Cell {
     }
 
     @Override
-    public Cell clone() {
+    public Cell copy() {
         return new Whale(getLastUpdate());
     }
 
@@ -25,7 +25,7 @@ class Whale extends Cell {
     @Override
     boolean go(Cell cells[][], int r, int c, int direction, long timestamp) {
         super.go(cells, r, c, direction, timestamp);
-        boolean moved = false;
+        boolean moved;
         int new_rc[] = findFirstThing(cells, r, c, Type.PENGUIN);
         if (tryMove(cells, r, c, new_rc[2], CLONE_PERIOD, Type.PENGUIN)) {
             mHungerLevel = 0;

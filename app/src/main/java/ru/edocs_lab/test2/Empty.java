@@ -8,7 +8,7 @@ class Empty extends Cell {
     }
 
     @Override
-    public Cell clone() {
+    public Cell copy() {
         return new Empty(getLastUpdate());
     }
 

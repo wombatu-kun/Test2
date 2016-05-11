@@ -11,23 +11,23 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private AppMgr mAppMgr;
+    private WorldManager mWorldManager;
     private int mCellWidth;
     private int mCellHeight;
 
     public ImageAdapter(Context c, int width, int height) {
         mContext = c;
-        mAppMgr = AppMgr.get(mContext);
+        mWorldManager = WorldManager.get();
         mCellWidth = width;
         mCellHeight = height;
     }
 
     public int getCount() {
-        return AppMgr.COLUMNS * AppMgr.ROWS;
+        return WorldManager.COLUMNS * WorldManager.ROWS;
     }
 
     public Object getItem(int position) {
-        return mAppMgr.getCellContent(position);
+        return mWorldManager.getCellContent(position);
     }
 
     public long getItemId(int position) {
