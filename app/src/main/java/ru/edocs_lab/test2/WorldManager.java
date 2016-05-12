@@ -62,8 +62,8 @@ public class WorldManager {
     }
 
     private Cell getEnvCell(int r, int c, int shift[]) {
-        int envR = r+d[0];
-        int envC = c+d[1];
+        int envR = r+shift[0];
+        int envC = c+shift[1];
         if (envR>-1 && envR<ROWS && envC>-1 && envC<COLUMNS) {
             return cells[envR][envC];
         } else {
