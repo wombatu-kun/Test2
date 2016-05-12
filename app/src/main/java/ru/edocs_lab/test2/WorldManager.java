@@ -49,21 +49,26 @@ public class WorldManager {
 
     private void generateEnvironments() {
         Cell environment[];
+        int shift[][] = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
         for(int r=0; r<ROWS; r++) {
             for (int c=0; c<COLUMNS; c++) {
                 environment = new Cell[DIRECTIONS.length];
-                environment[0] = r>0 ? cells[r-1][c] : null;
-                environment[1] = r>0 && c<(COLUMNS-1)? cells[r-1][c+1] : null;
-                environment[2] = c<(COLUMNS-1) ? cells[r][c+1] : null;
-                environment[3] = r<(ROWS-1) && c<(COLUMNS-1)? cells[r+1][c+1] : null;
-                environment[4] = r<(ROWS-1) ? cells[r+1][c] : null;
-                environment[5] = r<(ROWS-1) && c>0 ? cells[r+1][c-1] : null;
-                environment[6] = c>0 ? cells[r][c-1] : null;
-                environment[7] = r>0 && c>0? cells[r-1][c-1] : null;
+                for(int i=0; i<DIRECTIONS.length; i++){
+                    environment[i] = getEnvCell(r, c, shift[i]);
+                }
                 cells[r][c].setEnvironment(environment);
             }
         }
+    }
 
+    private Cell getEnvCell(int r, int c, int shift[]) {
+        int envR = r+d[0];
+        int envC = c+d[1];
+        if (envR>-1 && envR<ROWS && envC>-1 && envC<COLUMNS) {
+            return cells[envR][envC];
+        } else {
+            return null;
+        }
     }
 
     void restart() {
